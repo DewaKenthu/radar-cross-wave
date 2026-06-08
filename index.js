@@ -10,6 +10,17 @@ async function sendDiscord(mission) {
     return;
   }
 
+  let slotStatus = "🟢";
+
+  const remaining =
+    mission.maxParticipants - mission.approvedCount;
+
+  if (remaining <= 10)
+    slotStatus = "🟡";
+
+  if (remaining <= 3)
+    slotStatus = "🔴";
+
   await fetch(webhook, {
     method: "POST",
     headers: {
@@ -29,8 +40,8 @@ async function sendDiscord(mission) {
               inline: true
             },
             {
-              name: "🆔 Mission ID",
-              value: String(mission.id),
+              name: "🎟️ Slot",
+              value: `${mission.approvedCount}/${mission.maxParticipants}`,
               inline: true
             },
             {
