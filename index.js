@@ -16,8 +16,35 @@ async function sendDiscord(message) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      content: message
-    })
+      embeds: [
+      {
+        title: "🚨 CROSS WAVE ALERT",
+        description: mission.title,
+        color: 5763719,
+        fields: [
+          {
+            name: "💰 Reward",
+            value: `${mission.rewardAmount} ${mission.rewardType}`,
+            inline: true
+          },
+          {
+            name: "🆔 Mission ID",
+            value: String(mission.id),
+            inline: true
+          },
+          {
+            name: "📅 Deadline",
+            value: new Date(mission.endedAt).toLocaleDateString("id-ID"),
+            inline: false
+          }
+        ],
+        footer: {
+          text: "Radar CROSS WAVE"
+        },
+        timestamp: new Date().toISOString()
+      }
+    ]
+  })
   });
 }
 
