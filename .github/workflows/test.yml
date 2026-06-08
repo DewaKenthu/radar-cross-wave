@@ -1,10 +1,16 @@
-name: Test WAVE API
+name: Radar CROSS WAVE
 
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: write
+
 jobs:
-  test:
+  monitor:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +20,23 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
-      - name: Run Script
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Bot
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: node index.js
+
+      - name: Commit Snapshot
+        run: |
+          git config --global user.name "Radar CROSS WAVE"
+          git config --global user.email "actions@github.com"
+
+          git add missions.json
+
+          git diff --cached --quiet || git commit -m "Update mission snapshot"
+
+          git push
