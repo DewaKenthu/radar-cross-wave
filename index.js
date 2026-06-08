@@ -59,20 +59,29 @@ async function main() {
   );
 }
 
+  if (newMissions.length > 0) {
+
+    let message =
+`🚨 **${newMissions.length} MISSION BARU CROSS WAVE**
+
+`;
+
   for (const mission of newMissions) {
-    const msg =
-`🚨 MISSION BARU CROSS WAVE
 
-🆔 ${mission.id}
-
+    message +=
+`🎯 #${mission.id}
 📋 ${mission.title}
+🎁 ${mission.rewardAmount} ${mission.rewardType}
+📅 Berakhir: ${mission.endedAt}
 
-🌐 https://wave.crosstoken.io`;
-
-    console.log("Kirim Discord:", mission.id);
-
-    await sendDiscord(msg);
+`;
   }
+
+  message +=
+`🌐 https://wave.crosstoken.io`;
+
+  await sendDiscord(message);
+}
 
   fs.writeFileSync(
     "missions.json",
