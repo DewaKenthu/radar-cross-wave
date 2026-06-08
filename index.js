@@ -18,7 +18,8 @@ async function sendDiscord(mission) {
     body: JSON.stringify({
       embeds: [
         {
-          title: "🚨 CROSS WAVE ALERT",
+          title: "🎯 Mission Baru CROSS WAVE",
+          url: "https://wave.crosstoken.io/mission",
           description: mission.title,
           color: 16766720,
           fields: [
@@ -34,7 +35,16 @@ async function sendDiscord(mission) {
             },
             {
               name: "📅 Deadline",
-              value: new Date(mission.endedAt).toLocaleString("id-ID"),
+              value: new Date(mission.endedAt).toLocaleString(
+                "id-ID",
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit"
+                }
+              ),
               inline: false
             }
           ],
