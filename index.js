@@ -44,7 +44,7 @@ async function sendDiscord(mission) {
               inline: true
             },
             {
-              name: "🎟️ Slot",
+              name: `${slotStatus} Slot`,
               value: `${mission.approvedCount}/${mission.maxParticipants}`,
               inline: true
             },
@@ -107,10 +107,6 @@ async function main() {
 
     }
   }
-
-  console.log(
-    JSON.stringify(groups[0], null, 2)
-);
   
   const storage = JSON.parse(
     fs.readFileSync("missions.json", "utf8")
