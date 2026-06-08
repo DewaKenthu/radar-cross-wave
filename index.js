@@ -2,7 +2,7 @@ import fs from "fs";
 
 const API_URL = "https://wave-client-api.crosstoken.io/missions";
 
-async function sendDiscord(message) {
+async function sendDiscord(mission) {
   const webhook = process.env.DISCORD_WEBHOOK_URL;
 
   if (!webhook) {
@@ -17,34 +17,34 @@ async function sendDiscord(message) {
     },
     body: JSON.stringify({
       embeds: [
-      {
-        title: "🚨 CROSS WAVE ALERT",
-        description: mission.title,
-        color: 5763719,
-        fields: [
-          {
-            name: "💰 Reward",
-            value: `${mission.rewardAmount} ${mission.rewardType}`,
-            inline: true
+        {
+          title: "🚨 CROSS WAVE ALERT",
+          description: mission.title,
+          color: 16766720,
+          fields: [
+            {
+              name: "💰 Reward",
+              value: `${mission.rewardAmount} ${mission.rewardType}`,
+              inline: true
+            },
+            {
+              name: "🆔 Mission ID",
+              value: String(mission.id),
+              inline: true
+            },
+            {
+              name: "📅 Deadline",
+              value: new Date(mission.endedAt).toLocaleString("id-ID"),
+              inline: false
+            }
+          ],
+          footer: {
+            text: "Radar CROSS WAVE"
           },
-          {
-            name: "🆔 Mission ID",
-            value: String(mission.id),
-            inline: true
-          },
-          {
-            name: "📅 Deadline",
-            value: new Date(mission.endedAt).toLocaleDateString("id-ID"),
-            inline: false
-          }
-        ],
-        footer: {
-          text: "Radar CROSS WAVE"
-        },
-        timestamp: new Date().toISOString()
-      }
-    ]
-  })
+          timestamp: new Date().toISOString()
+        }
+      ]
+    })
   });
 }
 
@@ -80,48 +80,24 @@ async function main() {
   console.log("Mission ditemukan:", missions.length);
   console.log("Mission baru:", newMissions.length);
 
-  if (newMissions.length > 0) {
-  console.log(
-    JSON.stringify(newMissions[0], null, 2)
-  );
-}
-
-  if (newMissions.length > 0) {
-
-    let message =
-`🚨 **${newMissions.length} MISSION BARU CROSS WAVE**
-
-`;
-
+if (newMissions.length > 0) {
   for (const mission of newMissions) {
-
-    message +=
-`🎯 #${mission.id}
-📋 ${mission.title}
-🎁 ${mission.rewardAmount} ${mission.rewardType}
-📅 Berakhir: ${mission.endedAt}
-
-`;
+    await sendDiscord(mission);
   }
-
-  message +=
-`🌐 https://wave.crosstoken.io`;
-
-  await sendDiscord(message);
 }
 
-  fs.writeFileSync(
-    "missions.json",
-    JSON.stringify(
-      {
-        knownMissionIds: missions.map(m => m.id)
-      },
-      null,
-      2
-    )
-  );
-}
+fs.writeFileSync(
+  "missions.json",
+  JSON.stringify(
+    {
+      knownMissionIds: missions.map(m => m.id)
+    },
+    null,
+    2
+  )
+);
 
+}
 main().catch(err => {
   console.error(err);
   process.exit(1);
