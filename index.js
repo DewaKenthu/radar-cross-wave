@@ -53,6 +53,12 @@ async function main() {
   console.log("Mission ditemukan:", missions.length);
   console.log("Mission baru:", newMissions.length);
 
+  if (newMissions.length > 0) {
+  console.log(
+    JSON.stringify(newMissions[0], null, 2)
+  );
+}
+
   for (const mission of newMissions) {
     const msg =
 `🚨 MISSION BARU CROSS WAVE
