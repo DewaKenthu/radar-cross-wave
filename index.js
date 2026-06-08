@@ -29,6 +29,10 @@ async function sendDiscord(mission) {
     body: JSON.stringify({
       embeds: [
         {
+          author: {
+            name: mission.gameTitle || "Unknown Game"
+          },
+          
           title: "🎯 Mission Baru CROSS WAVE",
           url: "https://wave.crosstoken.io/mission",
           description: mission.title,
@@ -62,6 +66,11 @@ async function sendDiscord(mission) {
           footer: {
             text: "Radar CROSS WAVE"
           },
+
+          thumbnail: {
+            url: mission.thumbnailUrl
+          },
+          
           timestamp: new Date().toISOString()
         }
       ]
@@ -84,7 +93,18 @@ async function main() {
 
   for (const group of groups) {
     if (group.missions) {
-      missions.push(...group.missions);
+
+      for (const mission of group.missions) {
+
+        missions.push({
+          ...mission,
+          gameTitle: group.game?.title,
+          thumbnailUrl: group.thumbnailImage?.url,
+          campaignName: group.name
+        });
+
+      }
+
     }
   }
 
