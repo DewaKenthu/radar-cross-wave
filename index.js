@@ -89,8 +89,8 @@ async function main() {
   }
 
   console.log(
-    JSON.stringify(missions[0], null, 2)
-  );
+    JSON.stringify(groups[0], null, 2)
+);
   
   const storage = JSON.parse(
     fs.readFileSync("missions.json", "utf8")
