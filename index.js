@@ -10,12 +10,24 @@ async function main() {
 
     const data = await response.json();
 
-    console.log("=== CROSS WAVE ===");
-    console.log("Mission ditemukan:", Array.isArray(data) ? data.length : "Unknown");
+    const groups = data.content || [];
 
-    console.log(
-      JSON.stringify(data, null, 2).slice(0, 1000)
-    );
+    let missions = [];
+
+    for (const group of groups) {
+      if (group.missions) {
+        missions.push(...group.missions);
+      }
+    }
+
+    console.log("=== CROSS WAVE ===");
+    console.log("Mission ditemukan:", missions.length);
+
+    for (const mission of missions.slice(0, 10)) {
+      console.log(
+        `[${mission.id}] ${mission.title}`
+      );
+    }
 
   } catch (error) {
     console.error(error);
